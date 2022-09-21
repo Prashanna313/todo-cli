@@ -1,10 +1,9 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package main
 
-import "todoapp/cmd"
+import "todo-cli/cmd"
 
 func main() {
 	cmd.Execute()

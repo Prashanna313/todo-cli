@@ -16,8 +16,8 @@ var dataFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "todoapp",
-	Short: "A brief description of your application",
+	Use:   "todo-cli",
+	Short: "Todo-cli is cli tool to add, list and mark todo items",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 

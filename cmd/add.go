@@ -5,7 +5,7 @@ package cmd
 
 import (
 	"log"
-	"todoapp/todo"
+	"todo-cli/todo"
 
 	"github.com/spf13/cobra"
 )
