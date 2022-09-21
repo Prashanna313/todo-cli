@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var priority int
+
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
@@ -25,7 +27,9 @@ func addRun(cmd *cobra.Command, args []string) {
 	}
 
 	for _, x := range args {
-		items = append(items, todo.Item{Text: x})
+		item := todo.Item{Text: x}
+		item.SetPriority(priority)
+		items = append(items, item)
 	}
 
 	er := todo.SaveItems(dataFile, items)
@@ -37,6 +41,8 @@ func addRun(cmd *cobra.Command, args []string) {
 
 func init() {
 	rootCmd.AddCommand(addCmd)
+
+	addCmd.Flags().IntVarP(&priority, "priority", "p", 2, "Supported Priority: 1, 2, 3")
 
 	// Here you will define your flags and configuration settings.
 
