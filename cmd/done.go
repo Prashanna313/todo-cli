@@ -1,33 +1,49 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Prashanna R
 */
 package cmd
 
 import (
 	"fmt"
+	"log"
+	"strconv"
+	"todo-cli/todo"
 
 	"github.com/spf13/cobra"
 )
 
 // doneCmd represents the done command
 var doneCmd = &cobra.Command{
-	Use:   "done",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: DoneItem,
+	Use:     "done",
+	Aliases: []string{"do"},
+	Short:   "marks an item as done",
+	Long:    `DoneCmd is used to mark an item as done`,
+	Run:     DoneItem,
 }
 
 func DoneItem(cmd *cobra.Command, args []string) {
-	fmt.Println("done called")
+	items, _ := todo.ReadItems(dataFile)
+	i, err := strconv.Atoi(args[0])
+
+	if err != nil {
+		log.Fatalln(args[0], "is not a valid label\n", err)
+	}
+
+	if i > 0 && i < len(items) {
+		items[i-1].Done = true
+		fmt.Printf("%q %v\n", items[i-1].Text, "marked done")
+
+		todo.SaveItems(dataFile, items)
+	} else {
+		log.Println(i, "doesn't match any items")
+	}
+
 }
 
 func init() {
 	rootCmd.AddCommand(doneCmd)
+
+	listCmd.Flags().BoolVar(&doneOpt, "done", false, "Show 'Done' Todos")
 
 	// Here you will define your flags and configuration settings.
 

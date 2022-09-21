@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Prashanna R
 */
 package cmd
 
@@ -16,7 +16,7 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "A brief description of your command",
+	Short: "List items that need to be done",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -26,6 +26,11 @@ to quickly create a Cobra application.`,
 	Run: ListItems,
 }
 
+var (
+	allOpt  bool
+	doneOpt bool
+)
+
 func ListItems(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 	if err != nil {
@@ -33,7 +38,9 @@ func ListItems(cmd *cobra.Command, args []string) {
 	}
 	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
 	for _, i := range items {
-		fmt.Fprintln(w, i.PrettyP()+"\t"+i.Text+"\t")
+		if allOpt || i.Done == doneOpt {
+			fmt.Fprintln(w, i.Label()+"\t"+i.PrettyDone()+"\t"+i.PrettyP()+"\t"+i.Text+"\t")
+		}
 	}
 
 	w.Flush()
@@ -43,13 +50,6 @@ func ListItems(cmd *cobra.Command, args []string) {
 func init() {
 	rootCmd.AddCommand(listCmd)
 
-	// Here you will define your flags and configuration settings.
+	listCmd.Flags().BoolVar(&allOpt, "all", false, "list all items")
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

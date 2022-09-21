@@ -2,11 +2,12 @@ package todo
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"strconv"
 )
 
 type Item struct {
+	Done     bool
 	Priority int
 	Text     string
 	position int
@@ -14,13 +15,13 @@ type Item struct {
 
 func ReadItems(filename string) ([]Item, error) {
 	var items []Item
-	b, err := ioutil.ReadFile(filename)
+	b, err := os.ReadFile(filename)
 
 	if err := json.Unmarshal(b, &items); err != nil {
 		return []Item{}, nil
 	}
 
-	for i, _ := range items {
+	for i := range items {
 		items[i].position = i + 1
 	}
 
@@ -33,7 +34,7 @@ func SaveItems(filename string, items []Item) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(filename, b, 0644)
+	err = os.WriteFile(filename, b, 0644)
 	if err != nil {
 		return err
 	}
@@ -44,6 +45,13 @@ func SaveItems(filename string, items []Item) error {
 
 func (i *Item) Label() string {
 	return strconv.Itoa(i.position) + "."
+}
+
+func (i *Item) PrettyDone() string {
+	if i.Done {
+		return "X"
+	}
+	return " "
 }
 
 func (i *Item) PrettyP() string {
