@@ -10,17 +10,21 @@ type Item struct {
 }
 
 func ReadItems(filename string) ([]Item, error) {
-	err := ioutil.ReadFile(filename)
+	var items []Item
+	b, err := ioutil.ReadFile(filename)
 
-	if err != nil {
+	if err := json.Unmarshal(b, &items); err != nil {
 		return []Item{}, nil
 	}
-	return nil, err
-	235
+	return items, err
 }
 
 func SaveItems(filename string, items []Item) error {
 	b, err := json.Marshal(items)
+	if err != nil {
+		return err
+	}
+
 	err = ioutil.WriteFile(filename, b, 0644)
 	if err != nil {
 		return err
