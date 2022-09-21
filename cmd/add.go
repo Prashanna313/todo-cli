@@ -17,10 +17,10 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a new todo",
 	Long:  `Add will create a new todo item to the list`,
-	Run:   addRun,
+	Run:   addItem,
 }
 
-func addRun(cmd *cobra.Command, args []string) {
+func addItem(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 	if err != nil {
 		log.Printf("%v", err)
